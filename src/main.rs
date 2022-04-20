@@ -5,7 +5,6 @@ use std::process::exit;
 struct Urls {
     name: String,
     url: String,
-    found: bool,
 }
 
 #[tokio::main]
@@ -16,6 +15,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("please provide a username!");
         exit(1);
     }
+
+    println!(
+        "{}",
+        format!(
+            r#"
+  _   _ ___  ___ _ __ _ __ ___  ___ ___  _ __        _ __ ___ 
+  | | | / __|/ _ \ '__| '__/ _ \/ __/ _ \| '_ \ _____| '__/ __|
+  | |_| \__ \  __/ |  | | |  __/ (_| (_) | | | |_____| |  \__ \
+   \__,_|___/\___|_|  |_|  \___|\___\___/|_| |_|     |_|  |___/
+                by: https://github.com/Senpai-10
+   "#
+        )
+        .bright_green()
+    );
 
     let username = &args[0];
 
@@ -34,23 +47,35 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             urls.push(Urls {
                 name: line.0.to_string(),
                 url: line.1.to_string(),
-                found: false,
             });
         }
     }
 
+    println!(
+        "{} Checking username {}",
+        format!("[*]").bold().bright_yellow(),
+        username.bold()
+    );
     for url in urls {
-        println!("{}\t{}\t{}", url.name, url.url, url.found);
-    }
-    // for url in urls {
-    //     let res = reqwest::get(url.url.replace("{}", "")).await?;
+        let new_url = url.url.replace("{}", username);
+        let res = reqwest::get(&new_url).await?;
 
-    //     if res.status() == 200 {
-    //         println!("Found!");
-    //     } else {
-    //         println!("Not found!");
-    //     }
-    // }
+        if res.status() == 200 {
+            println!(
+                "{} {}: {}",
+                format!("[+]").bold().bright_green(),
+                url.name,
+                new_url.bold()
+            );
+        } else {
+            println!(
+                "{} {}: {}",
+                format!("[-]").bold().bright_red(),
+                url.name,
+                format!("Not Found").bright_red().bold()
+            );
+        }
+    }
 
     Ok(())
 }
