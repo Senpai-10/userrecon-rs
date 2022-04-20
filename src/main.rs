@@ -8,22 +8,26 @@ struct Urls {
     url: String,
 }
 
+const HELP_MESSAGE: &str = r#"Usage: userrecon-rs <username>
+
+Options:
+--clean-output      ,-c      Only output urls
+--help              ,-h      Print this message
+"#;
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut args: Vec<String> = std::env::args().skip(1).collect();
+    let args: Vec<String> = std::env::args().skip(1).collect();
     let mut clean_output = false;
     let mut username = &String::new();
 
     if args.len() <= 0 {
         println!(
             "{} Please provide a username!",
-            format!("[ ERROR ]").bright_red()
+            format!("[ERROR]").bright_red()
         );
-        println!("Usage: userrecon-rs <username>");
-        println!(
-            "\nOptions:
---clean-output, -c\tonly output urls"
-        );
+        println!("");
+        println!("{}", HELP_MESSAGE);
         exit(1);
     }
 
@@ -31,6 +35,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         if arg.starts_with("-") {
             if arg == "--clean-output" || arg == "-c" {
                 clean_output = true;
+            }
+            if arg == "--help" || arg == "-h" {
+                println!("{}", HELP_MESSAGE);
+                exit(0);
             }
         } else if username.is_empty() && arg.starts_with("-") == false {
             username = arg;
