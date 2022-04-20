@@ -1,6 +1,7 @@
 use colored::Colorize;
 use reqwest;
 use std::process::exit;
+use whoami;
 
 struct Urls {
     name: String,
@@ -12,7 +13,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = std::env::args().skip(1).collect();
 
     if args.len() <= 0 {
-        println!("please provide a username!");
+        println!(
+            "{} Please provide a username!",
+            format!("[ ERROR ]").bright_red()
+        );
+        println!("Usage: userrecon-rs <username>");
         exit(1);
     }
 
@@ -35,10 +40,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // [!] found (green)
     // [x] no found (red)
 
+    let home_dir = format!("/home/{}/", whoami::username());
+    let db_dir = format!("{}/.config/userrecon-rs", home_dir);
+    let db_file = format!("{}/urls.txt", db_dir);
+
+    if std::path::Path::new(&db_dir).exists() == false {
+        std::fs::create_dir_all(&db_dir)?;
+    }
+    if std::path::Path::new(&db_file).exists() == false {
+        std::fs::copy("./urls.txt", &db_file)?;
+    }
+
     let mut urls: Vec<Urls> = Vec::new();
 
     // loading urls into urls vec
-    let contents = std::fs::read_to_string("./urls.txt")?;
+    let contents = std::fs::read_to_string(db_file)?;
 
     for line in contents.lines() {
         if line.starts_with("//") == false && line.starts_with("#") == false {
