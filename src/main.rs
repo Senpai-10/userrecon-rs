@@ -37,9 +37,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let username = &args[0];
 
-    // [!] found (green)
-    // [x] no found (red)
-
     let home_dir = format!("/home/{}/", whoami::username());
     let db_dir = format!("{}/.config/userrecon-rs", home_dir);
     let db_file = format!("{}/urls.txt", db_dir);
