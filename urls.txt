@@ -17,7 +17,6 @@ Colourlovers:https://www.colourlovers.com/love/{}
 Contently:https://{}.contently.com
 Creativemarket:https://creativemarket.com/{}
 Dailymotion:https://www.dailymotion.com/{}
-Designspiration:https://www.designspiration.net/{}
 Deviantart:https://{}.deviantart.com
 Disqus:https://disqus.com/{}
 Dribbble:https://dribbble.com/{}
@@ -34,7 +33,6 @@ Goodreads:https://www.goodreads.com/{}
 Gravatar:https://en.gravatar.com/{}
 Gumroad:https://www.gumroad.com/{}
 Houzz:https://houzz.com/user/{}
-Hubpages:https://{}.hubpages.com
 Ifttt:https://www.ifttt.com/p/{}
 Imgur:https://imgur.com/user/{}
 Instagram:https://www.instagram.com/{}
@@ -60,7 +58,6 @@ Slideshare:https://slideshare.net/{}
 Soundcloud:https://soundcloud.com/{}
 Spotify:https://open.spotify.com/user/{}
 Steam:https://steamcommunity.com/id/{}
-Tracky:https://tracky.com/user/{}
 Trakt.tv:https://www.trakt.tv/users/{}
 Tripadvisor:https://tripadvisor.com/members/{}
 Tripit:https://www.tripit.com/people/{}
