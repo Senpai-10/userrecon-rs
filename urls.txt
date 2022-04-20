@@ -31,7 +31,6 @@ Foursquare:https://foursquare.com/{}
 Github:https://www.github.com/{}
 Goodreads:https://www.goodreads.com/{}
 Gravatar:https://en.gravatar.com/{}
-Gumroad:https://www.gumroad.com/{}
 Houzz:https://houzz.com/user/{}
 Ifttt:https://www.ifttt.com/p/{}
 Imgur:https://imgur.com/user/{}
