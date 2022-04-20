@@ -65,14 +65,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut db_dir = String::new();
     let mut db_file = String::new();
 
-    if whoami::platform() == whoami::Platform::Linux {
-        home_dir = format!("/home/{}/", whoami::username());
-        db_dir = format!("{}/.config/userrecon-rs", home_dir);
-        db_file = format!("{}/urls.txt", db_dir);
-    } else if whoami::platform() == whoami::Platform::Windows {
-        let home_dir = format!("C:\\Users\\{}", whoami::username());
-        let db_dir = format!("{}\\userrecon-rs", home_dir);
-        let db_file = format!("{}\\urls.txt", db_dir);
+    match whoami::platform() {
+        whoami::Platform::Linux => {
+            home_dir = format!("/home/{}/", whoami::username());
+            db_dir = format!("{}/.config/userrecon-rs", home_dir);
+            db_file = format!("{}/urls.txt", db_dir);
+        }
+        whoami::Platform::Windows => {
+            let home_dir = format!("C:\\Users\\{}", whoami::username());
+            let db_dir = format!("{}\\userrecon-rs", home_dir);
+            let db_file = format!("{}\\urls.txt", db_dir);
+        }
+        _ => {}
     }
 
     if std::path::Path::new(&db_dir).exists() == false {
