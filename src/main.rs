@@ -1,4 +1,6 @@
+use colored::Colorize;
 use reqwest;
+use std::process::exit;
 
 struct Urls {
     name: String,
@@ -8,6 +10,15 @@ struct Urls {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let args: Vec<String> = std::env::args().skip(1).collect();
+
+    if args.len() <= 0 {
+        println!("please provide a username!");
+        exit(1);
+    }
+
+    let username = &args[0];
+
     // [!] found (green)
     // [x] no found (red)
 
