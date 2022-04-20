@@ -65,7 +65,6 @@ Trip.skyscanner:https://www.trip.skyscanner.com/user/{}
 Tumblr:https://{}.tumblr.com
 Twitter:https://www.twitter.com/{}
 Vimeo:https://vimeo.com/{}
-Vk:https://vk.com/{}
 Wattpad:https://www.wattpad.com/user/{}
 Wikipedia:https://www.wikipedia.org/wiki/User:{}
 Wordpress:https://{}.wordpress.com
