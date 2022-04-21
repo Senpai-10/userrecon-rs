@@ -23,11 +23,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     if args.len() <= 0 {
         println!(
-            "{} Please provide a username!",
-            format!("[ERROR]").bright_red()
+            "{} Please provide a username!{}{}",
+            format!("[ERROR]").bright_red(),
+            "\n",
+            HELP_MESSAGE,
         );
-        println!("");
-        println!("{}", HELP_MESSAGE);
         exit(1);
     }
 
@@ -61,9 +61,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         );
     }
 
-    let mut home_dir = String::new();
-    let mut db_dir = String::new();
-    let mut db_file = String::new();
+    let home_dir: String;
+    let db_dir: String;
+    let db_file: String;
 
     match whoami::platform() {
         whoami::Platform::Linux => {
@@ -76,7 +76,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             db_dir = format!("{}\\userrecon-rs", home_dir);
             db_file = format!("{}\\urls.txt", db_dir);
         }
-        _ => {}
+        _ => {
+            println!(
+                "{} Unsupported platform!{}",
+                format!("[ERROR]").bright_red(),
+                "\n",
+            );
+            exit(1);
+        }
     }
 
     if std::path::Path::new(&db_dir).exists() == false {
