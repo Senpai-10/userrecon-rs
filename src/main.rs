@@ -72,9 +72,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             db_file = format!("{}/urls.txt", db_dir);
         }
         whoami::Platform::Windows => {
-            let home_dir = format!("C:\\Users\\{}", whoami::username());
-            let db_dir = format!("{}\\userrecon-rs", home_dir);
-            let db_file = format!("{}\\urls.txt", db_dir);
+            home_dir = format!("C:\\Users\\{}", whoami::username());
+            db_dir = format!("{}\\userrecon-rs", home_dir);
+            db_file = format!("{}\\urls.txt", db_dir);
         }
         _ => {}
     }
