@@ -1,7 +1,6 @@
 use colored::Colorize;
 use reqwest;
 use std::process::exit;
-use whoami;
 
 struct Urls {
     name: String,
@@ -40,12 +39,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("{}", HELP_MESSAGE);
                 exit(0);
             }
-        } else if username.is_empty() && arg.starts_with("-") == false {
+        } else if username.is_empty() && !arg.starts_with("-") {
             username = arg;
         }
     }
 
-    if clean_output == false {
+    if !clean_output {
         println!(
             "{}",
             format!(
@@ -61,45 +60,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         );
     }
 
-    let home_dir: String;
-    let db_dir: String;
-    let db_file: String;
-
-    match whoami::platform() {
-        whoami::Platform::Linux => {
-            home_dir = format!("/home/{}/", whoami::username());
-            db_dir = format!("{}/.config/userrecon-rs", home_dir);
-            db_file = format!("{}/urls.txt", db_dir);
-        }
-        whoami::Platform::Windows => {
-            home_dir = format!("C:\\Users\\{}", whoami::username());
-            db_dir = format!("{}\\userrecon-rs", home_dir);
-            db_file = format!("{}\\urls.txt", db_dir);
-        }
-        _ => {
-            println!(
-                "{} Unsupported platform!{}",
-                format!("[ERROR]").bright_red(),
-                "\n",
-            );
-            exit(1);
-        }
-    }
-
-    if std::path::Path::new(&db_dir).exists() == false {
-        std::fs::create_dir_all(&db_dir)?;
-    }
-    if std::path::Path::new(&db_file).exists() == false {
-        std::fs::write(&db_file, DB_FILE_CONTENTS)?;
-    }
-
     let mut urls: Vec<Urls> = Vec::new();
 
     // loading urls into urls vec
-    let contents = std::fs::read_to_string(db_file)?;
+    let contents = DB_FILE_CONTENTS;
 
     for line in contents.lines() {
-        if line.starts_with("//") == false && line.starts_with("#") == false {
+        if !line.starts_with("//") && !line.starts_with("#") {
             let line = line.split_once(':').unwrap();
 
             urls.push(Urls {
@@ -109,42 +76,60 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    if clean_output == false {
+    if !clean_output {
         println!(
             "{} Checking username {}",
             format!("[*]").bold().bright_yellow(),
             username.bold()
         );
     }
+
     for url in urls {
         let new_url = url.url.replace("{}", username);
-        let res = reqwest::get(&new_url).await?;
 
-        if res.status() == 200 {
-            if clean_output == false {
-                println!(
-                    "{} {}: {}",
-                    format!("[+]").bold().bright_green(),
-                    url.name,
-                    new_url.bold()
-                );
-            } else if clean_output == true {
-                println!("{}", new_url);
+        match reqwest::get(&new_url).await {
+            Ok(res) => {
+                if res.status() == 200 {
+                    if !clean_output {
+                        println!(
+                            "{} {}: {}",
+                            format!("[+]").bold().bright_green(),
+                            url.name,
+                            new_url.bold()
+                        );
+                    } else if clean_output {
+                        println!("{}", new_url);
+                    }
+                } else {
+                    if !clean_output {
+                        println!(
+                            "{} {}: {}",
+                            format!("[-]").bold().bright_red(),
+                            url.name,
+                            format!("Not Found").bright_red().bold()
+                        );
+                    }
+                }
             }
-        } else {
-            if clean_output == false {
-                println!(
-                    "{} {}: {}",
-                    format!("[-]").bold().bright_red(),
-                    url.name,
-                    format!("Not Found").bright_red().bold()
-                );
+            Err(_) => {
+                if !clean_output {
+                    println!(
+                        "{} {}: {}",
+                        format!("[?]").bold().bright_blue(),
+                        url.name,
+                        format!("{}", NOT_AVAILABLE).bold().bright_blue(),
+                    );
+                } else if clean_output {
+                    println!("{} - {}", new_url, NOT_AVAILABLE);
+                }
             }
         }
     }
 
     Ok(())
 }
+
+const NOT_AVAILABLE: &str = "Current Not Available";
 
 const DB_FILE_CONTENTS: &str = r#"500px:https://500px.com/{}
 About.me:https://about.me/{}
@@ -176,7 +161,8 @@ Flickr:https://www.flickr.com/people/{}
 Flipboard:https://flipboard.com/@{}
 Fotolog:https://fotolog.com/{}
 Foursquare:https://foursquare.com/{}
-Github:https://www.github.com/{}
+GitHub:https://www.github.com/{}
+GitLab:https://gitlab.com/{}
 Goodreads:https://www.goodreads.com/{}
 Gravatar:https://en.gravatar.com/{}
 Houzz:https://houzz.com/user/{}
