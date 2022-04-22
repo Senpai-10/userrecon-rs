@@ -7,7 +7,7 @@ struct Urls {
     url: String,
 }
 
-const HELP_MESSAGE: &str = r#"Usage: userrecon-rs <username>
+const HELP_MESSAGE: &str = r#"Usage: userrecon-rs [options] <username>
 
 Options:
 --clean-output      ,-c      Only output urls
