@@ -1,6 +1,6 @@
 # userrecon-rs
 
-Find usernames across over 70 social networks This is useful if you are running an investigation to determine the usage of the same username on different social networks.
+Find usernames across over 71 social networks This is useful if you are running an investigation to determine the usage of the same username on different social networks.
 
 ## Table of contents
 
@@ -18,5 +18,9 @@ cargo install --path .
 ## Usage
 
 ```shell
-userrecon-rs <username>
+userrecon-rs [options] <username>
+
+Options:
+--clean-output      ,-c      Only output urls
+--help              ,-h      Print this message
 ```
