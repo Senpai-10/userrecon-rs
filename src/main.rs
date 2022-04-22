@@ -7,10 +7,13 @@ struct Urls {
     url: String,
 }
 
+const VERSION: &str = env!("CARGO_PKG_VERSION");
+
 const HELP_MESSAGE: &str = r#"Usage: userrecon-rs [options] <username>
 
 Options:
 --clean-output      ,-c      Only output urls
+--version           ,-v      Show version
 --help              ,-h      Print this message
 "#;
 
@@ -35,6 +38,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             if arg == "--clean-output" || arg == "-c" {
                 clean_output = true;
             }
+            if arg == "--version" || arg == "-v" {
+                println!("Version: {}", VERSION);
+                exit(0);
+            }
             if arg == "--help" || arg == "-h" {
                 println!("{}", HELP_MESSAGE);
                 exit(0);
@@ -54,7 +61,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
   | |_| \__ \  __/ |  | | |  __/ (_| (_) | | | |_____| |  \__ \
    \__,_|___/\___|_|  |_|  \___|\___\___/|_| |_|     |_|  |___/
                 by: https://github.com/Senpai-10
-   "#
+                version: {}
+   "#,
+                VERSION
             )
             .bright_green()
         );
