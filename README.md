@@ -22,5 +22,6 @@ userrecon-rs [options] <username>
 
 Options:
 --clean-output      ,-c      Only output urls
+--version           ,-v      Show version
 --help              ,-h      Print this message
 ```
